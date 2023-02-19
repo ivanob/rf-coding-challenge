@@ -5,13 +5,12 @@ import ModalUserType from './ModalUserType';
 import { MyContext } from '../services/context';
 import { useNavigate } from 'react-router-dom';
 
-const useMyContext = () => useContext(MyContext);
-
 function App() {
+  const useMyContext = useContext(MyContext);
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [usernameCreated, setUsernameCreated] = useState('');
-  const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -27,11 +26,10 @@ function App() {
     });
     console.log(userAuthenticated.data.accessToken, userAuthenticated.data.user.login, userAuthenticated.data.user.role)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useMyContext().updateData(
-      userAuthenticated.data.accessToken,
-      userAuthenticated.data.user.login,
-      userAuthenticated.data.user.role
-    )
+    useMyContext.jwt = userAuthenticated.data.accessToken;
+    useMyContext.login = userAuthenticated.data.user.login;
+    useMyContext.role = userAuthenticated.data.user.role;
+    navigate("/admin");
   };
 
   // This function will trigger a modal to ask the role of the new user
@@ -52,7 +50,6 @@ function App() {
     setUsernameCreated(username);
     setUsername('');
     setPassword('');
-    navigate("/admin");
   };
 
   return (
