@@ -58,7 +58,7 @@ function App() {
     <Alert key='info' variant='info' show={showAlert}>
           User {usernameCreated} created
     </Alert>
-    <Container className="d-flex align-items-center justify-content-center" style={{ height: '100vh' }}>
+    <Container className="d-flex align-items-center justify-content-center" style={{ height: '100vh', backgroundColor: 'grey', margin: '0px' }}>
       <Form onSubmit={handleSubmit} className="p-5 bg-light rounded">
         <h2 className="text-center mb-4">Login</h2>
         <Form.Group controlId="formBasicUsername">

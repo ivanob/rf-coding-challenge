@@ -1,0 +1,3 @@
+curl 'http://localhost:3030/authentication/' \
+  -H 'Content-Type: application/json' \
+  --data-binary '{ "strategy": "local", "login": "b", "password": "b" }'

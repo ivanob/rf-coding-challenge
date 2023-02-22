@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { MyContext } from '../services/context';
 import { ROLES } from '../services/Types';
+import {fetchFootballPlayers} from '../services/Requests'
 import { Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import UserNotAuthenticated from './UserNotAuthenticated';
 import './AdminPage.css';
@@ -24,11 +25,14 @@ const Admin: React.FC = () => {
   const handleButtonClick = (buttonName: string) => {
     console.log(`Clicked button ${buttonName}`);
   };
-  const handleFetchDB = () => {
-    
+  const handleFetchDB = async () => {
+    const players = await fetchFootballPlayers(useMyContext.jwt)
+    console.log(players)
   }
 
   return (
+    <>
+    <p className="header">Hello <b>{useMyContext.login}</b>, you are logged in as <b>{useMyContext.role}</b></p>
     <div className="my-component-container">
       <Container className="my-component-box">
         <Row >
@@ -77,6 +81,7 @@ const Admin: React.FC = () => {
       </InputGroup>
       </Container>
     </div>
+    </>
   );
 };
 

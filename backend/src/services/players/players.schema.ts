@@ -24,7 +24,7 @@ export const playersResolver = resolve<Players, HookContext>({})
 export const playersExternalResolver = resolve<Players, HookContext>({})
 
 // Schema for creating new entries
-export const playersDataSchema = Type.Pick(playersSchema, ['number'], {
+export const playersDataSchema = Type.Pick(playersSchema, ['number', 'nationality', 'age', 'position'], {
   $id: 'PlayersData'
 })
 export type PlayersData = Static<typeof playersDataSchema>

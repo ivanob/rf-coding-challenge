@@ -17,3 +17,9 @@
   .row {
     padding: 10px;
   }
+
+  .header {
+    background-color: #f0f8ff;
+    padding: 10px;
+    margin: 0px;
+  }

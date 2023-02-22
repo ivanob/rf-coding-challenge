@@ -1,0 +1,2 @@
+curl -X PATCH 'http://localhost:3030/admin/' \
+  -H 'Content-Type: application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE2NzcwOTA4ODQsImV4cCI6MTY3NzE3NzI4NCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjYzZWZkMmJjNGNlZWFkNTA3NjNkNzU3YyIsImp0aSI6ImQ0MGVkYzMxLWM0MjgtNDg2Mi05YWY0LTEzMTZiNDYzYTc2MiJ9.mr9MxmCOr_TJyH4Xkr1rQ4TM_bCxpaGwPgZG-seOkTs' --data-binary '{ "fetchData": true, "removeOldNotifs": true }'

@@ -26,3 +26,21 @@ export async function authenticateUser(user: User): Promise<AxiosResponse<any>> 
       throw error;
     }
   }
+
+export async function fetchFootballPlayers(jwt: string): Promise<AxiosResponse<any>> {
+  try {
+    const response: AxiosResponse = await axios.put('http://localhost:3030/players/', 
+    {
+      'fetch-data': true
+    },
+    {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`}
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
