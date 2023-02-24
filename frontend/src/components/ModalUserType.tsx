@@ -2,7 +2,7 @@
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { ROLES } from '../services/Types';
+import { ROLES } from '../services/types';
 
 function ModalUserType(props: { active: boolean | undefined; closeModal: any; setRole: any; acceptModal: any }) {
    

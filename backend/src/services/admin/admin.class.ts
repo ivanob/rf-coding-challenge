@@ -1,9 +1,11 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#custom-services
-import type { Id, NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
+import type { NullableId, Params, ServiceInterface } from '@feathersjs/feathers'
 
 import type { Application } from '../../declarations'
 import type { Admin, AdminData, AdminPatch, AdminQuery } from './admin.schema'
 import axios from 'axios'
+import { MongoClient } from 'mongodb';
+import { app } from '../../app'
 
 export type { Admin, AdminData, AdminPatch }
 
@@ -28,7 +30,10 @@ export class AdminService<ServiceParams extends Params = AdminParams>
     }
     if(data?.fetchData){
       const players = await axios.get(playersJSON_URL);
-      console.log(players.data)
+      const flattened = (players.data.data.teams.flatMap((t: any) => t.players));
+      const mongoURL = app.get('mongodb') || ''
+      const db = await (await MongoClient.connect(mongoURL)).db('test');
+      db.collection('players').insertMany(flattened);
     }
     if(data?.removeOldNotifs){
 

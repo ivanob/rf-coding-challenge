@@ -1,33 +1,70 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { MyContext } from '../services/context';
-import { ROLES } from '../services/Types';
-import {fetchFootballPlayers} from '../services/Requests'
+import { ROLES } from '../services/types';
+import {fetchFootballPlayers} from '../services/requests'
 import { Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import UserNotAuthenticated from './UserNotAuthenticated';
 import './AdminPage.css';
 
+type Player = {
+  _id: string,
+  name: string,
+  number: number,
+  nationality: string,
+  birthdate: string,
+  position: string
+}
+
+const emptyPlayer: Player = {
+  _id: '',
+  name: '',
+  number: 0,
+  nationality: '',
+  birthdate: '',
+  position: ''
+}
+
 const Admin: React.FC = () => {
+  const [selectedPlayer, setSelectedPlayer] = useState(emptyPlayer);
+  const [players, setPlayers] = useState([emptyPlayer]);
+  useEffect(() => {
+    fetchFootballPlayers(useMyContext.jwt)
+      .then(response => 
+        {
+          const playersFetched = response.data.data
+          setPlayers(playersFetched);
+        }
+      )
+      .catch(error => console.error(error));
+  });
+
   const useMyContext = useContext(MyContext);
-  const options = ['Option 1', 'Option 2', 'Option 3'];
-  const [selectedOption, setSelectedOption] = useState(options[0]);
 
   if(useMyContext.role !== ROLES.admin){
     return <UserNotAuthenticated/>;
   }
 
-  
+  const onChangeSelectPlayer = (event: React.ChangeEvent<any>) => {
+    console.log(event.target.value);
+    const p = players.find(p => p._id === event.target.value);
+    console.log(p)
+    if(p){
+      setSelectedPlayer(p);
+    }
+  }
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // setSelectedOption(event.target.value);
-  };
+  const getPlayerDescription = (player: Player) => {
+    return `${player.name} (${player.nationality}) playing as ${player.position} with number ${player.number}`
+  }
   
 
   const handleButtonClick = (buttonName: string) => {
     console.log(`Clicked button ${buttonName}`);
   };
   const handleFetchDB = async () => {
-    const players = await fetchFootballPlayers(useMyContext.jwt)
-    console.log(players)
+    const playersFetched = await (await fetchFootballPlayers(useMyContext.jwt)).data.data
+    setPlayers(playersFetched);
+    setSelectedPlayer(playersFetched[0]);
   }
 
   return (
@@ -49,10 +86,10 @@ const Admin: React.FC = () => {
         <Col>
           <Form.Group>
             <Form.Label>Players</Form.Label>
-            <Form.Control as="select" value={selectedOption} onChange={()=> {}}>
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
+            <Form.Control as="select" onChange={onChangeSelectPlayer}>
+              {players.map((player) => (
+                <option key={player._id} value={player._id}>
+                  {getPlayerDescription(player)}
                 </option>
               ))}
             </Form.Control>
@@ -62,7 +99,7 @@ const Admin: React.FC = () => {
         <Row>
         <Col>
           <Form.Group>
-            <Form.Label>Selected player: {selectedOption}</Form.Label>
+            <Form.Label>Selected player: {selectedPlayer.name}</Form.Label>
           </Form.Group>
           </Col>
         </Row>

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
-import { authenticateUser, sendRequestCreateUser as registerNewUser } from '../services/Requests';
+import { authenticateUser, sendRequestCreateUser as registerNewUser } from '../services/requests';
 import ModalUserType from './ModalUserType';
 import { MyContext } from '../services/context';
 import { useNavigate } from 'react-router-dom';

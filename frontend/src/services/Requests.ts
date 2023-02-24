@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { User } from './Types';
+import { User } from './types';
 
 export async function sendRequestCreateUser(user: User): Promise<AxiosResponse<any>> {
   try {
@@ -29,14 +29,14 @@ export async function authenticateUser(user: User): Promise<AxiosResponse<any>> 
 
 export async function fetchFootballPlayers(jwt: string): Promise<AxiosResponse<any>> {
   try {
-    const response: AxiosResponse = await axios.put('http://localhost:3030/players/', 
-    {
-      'fetch-data': true
-    },
+    const response: AxiosResponse = await axios.get('http://localhost:3030/players', 
     {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwt}`}
+          'Authorization': `Bearer ${jwt}`},
+        params: {
+          $limit: 50
+        }
     });
     return response;
   } catch (error) {
