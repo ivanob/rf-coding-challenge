@@ -4,6 +4,7 @@ import { authenticateUser, sendRequestCreateUser as registerNewUser } from '../s
 import ModalUserType from './ModalUserType';
 import { MyContext } from '../services/context';
 import { useNavigate } from 'react-router-dom';
+import { ROLES } from '../services/types';
 
 function App() {
   const useMyContext = useContext(MyContext);
@@ -29,7 +30,14 @@ function App() {
     useMyContext.jwt = userAuthenticated.data.accessToken;
     useMyContext.login = userAuthenticated.data.user.login;
     useMyContext.role = userAuthenticated.data.user.role;
-    navigate("/admin");
+    switch(userAuthenticated.data.user.role){
+      case ROLES.admin:
+        navigate("/admin");
+        break;
+      case ROLES.user:
+        navigate("/user");
+        break;
+    }
   };
 
   // This function will trigger a modal to ask the role of the new user
@@ -54,7 +62,7 @@ function App() {
 
   return (
     <>
-    <ModalUserType active={show} closeModal={()=>setShow(false)} setRole={setRole} acceptModal={()=>userCreated}/>
+    <ModalUserType active={show} closeModal={()=>setShow(false)} setRole={() => setRole} acceptModal={()=>userCreated}/>
     <Alert key='info' variant='info' show={showAlert}>
           User {usernameCreated} created
     </Alert>
