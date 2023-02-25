@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { notificationsClient } from './services/notifications/notifications.shared'
+export type {
+  Notifications,
+  NotificationsData,
+  NotificationsQuery,
+  NotificationsPatch
+} from './services/notifications/notifications.shared'
+
 import { adminClient } from './services/admin/admin.shared'
 export type { Admin, AdminData, AdminPatch } from './services/admin/admin.shared'
 
@@ -42,5 +50,6 @@ export const createClient = <Configuration = any>(
   client.configure(userClient)
   client.configure(playersClient)
   client.configure(adminClient)
+  client.configure(notificationsClient)
   return client
 }

@@ -58,13 +58,17 @@ const Admin: React.FC = () => {
   }
   
 
-  const handleButtonClick = (buttonName: string) => {
-    console.log(`Clicked button ${buttonName}`);
+  const handleDeleteOldNotification = () => {
+    console.log(`Clicked button`);
   };
   const handleFetchDB = async () => {
     const playersFetched = await (await fetchFootballPlayers(useMyContext.jwt)).data.data
     setPlayers(playersFetched);
     setSelectedPlayer(playersFetched[0]);
+  }
+
+  const handleSendNotification = (event: any) => {
+    console.log(event);
   }
 
   return (
@@ -77,7 +81,7 @@ const Admin: React.FC = () => {
           <Button variant="primary" onClick={() => handleFetchDB()}>
             Fetch DB
           </Button>{' '}
-          <Button variant="primary" onClick={() => handleButtonClick('Button 2')}>
+          <Button variant="primary" onClick={() => handleDeleteOldNotification()}>
             Delete old notifications
           </Button>
         </Col>
@@ -85,7 +89,7 @@ const Admin: React.FC = () => {
       <Row>
         <Col>
           <Form.Group>
-            <Form.Label>Players</Form.Label>
+            <Form.Label>List of players (limited to 50)</Form.Label>
             <Form.Control as="select" onChange={onChangeSelectPlayer}>
               {players.map((player) => (
                 <option key={player._id} value={player._id}>
@@ -112,7 +116,7 @@ const Admin: React.FC = () => {
           aria-label="Send notification about selected player"
           aria-describedby="basic-addon2"
         />
-        <Button variant="outline-secondary" id="button-addon2">
+        <Button variant="outline-secondary" id="button-addon2" onClick={handleSendNotification}>
           Send
         </Button>
       </InputGroup>

@@ -1,3 +1,4 @@
+import { notifications } from './notifications/notifications'
 import { admin } from './admin/admin'
 import { players } from './players/players'
 import { user } from './users/users'
@@ -5,6 +6,7 @@ import { user } from './users/users'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(notifications)
   app.configure(admin)
   app.configure(players)
   app.configure(user)
