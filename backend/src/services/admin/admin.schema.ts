@@ -3,7 +3,7 @@ import { resolve, getValidator, querySyntax } from '@feathersjs/schema'
 import type { FromSchema } from '@feathersjs/schema'
 
 import type { HookContext } from '../../declarations'
-import { dataValidator, queryValidator } from '../../validators'
+import { dataValidator } from '../../validators'
 
 // Main data model schema
 export const adminSchema = {

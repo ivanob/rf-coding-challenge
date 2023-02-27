@@ -1,0 +1,3 @@
+curl -X PATCH 'http://localhost:3030/users/' \
+  -H 'Content-Type: application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE2Nzc0NTczMTYsImV4cCI6MTY3NzU0MzcxNiwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjYzZWZkMmJjNGNlZWFkNTA3NjNkNzU3YyIsImp0aSI6ImM3NWYyMmJhLWYzNmItNGY4My05MDViLTc4NDJlMmQ0NDAyMiJ9.8zW3BaKYkc2D0TL_kpqrXrtkmQGG1HimyEw4HkdjTtw' 
+  --data-binary '{ "subscribedPlayers": ["63f6726f7822011707a69afb", "63f6726f7822011707a6991f"] }'

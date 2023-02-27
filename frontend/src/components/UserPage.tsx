@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { MyContext } from '../services/context';
 import { ROLES } from '../services/types';
-import {fetchFootballPlayers} from '../services/requests'
-import { Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
+import {addSubscriptionsToUser, fetchFootballPlayer, fetchFootballPlayers} from '../services/requests'
+import {Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
 import UserNotAuthenticated from './UserNotAuthenticated';
-import './UserPage.css';
+import './styles/UserPage.css';
 
 type Player = {
   _id: string,
@@ -25,22 +25,34 @@ const emptyPlayer: Player = {
 }
 
 const UserPage: React.FC = () => {
+  const useMyContext = useContext(MyContext);
   const [selectedPlayer, setSelectedPlayer] = useState(emptyPlayer);
   const [players, setPlayers] = useState([emptyPlayer]);
-  const [playersSubscribed, setPlayersSubscribed] = useState([]);
+  const [playersSubscribed, setPlayersSubscribed] = useState<Player[]>([]);
   useEffect(() => {
     fetchFootballPlayers(useMyContext.jwt)
       .then(response => 
         {
           const playersFetched = response.data.data
           setPlayers(playersFetched);
+          useMyContext.subscribedPlayers.map(async (idPlayer: string) => {
+            const player = playersFetched.find((p: Player) => p._id === idPlayer)
+            setPlayersSubscribed(oldArray => [...oldArray, player])
+          })
         }
       )
       .catch(error => console.error(error));
+    // Promise.all(useMyContext.subscribedPlayers.map(async (id: string) => {
+    //   return fetchFootballPlayer(useMyContext.jwt, id)
+    // })).then(
+    //   resp => {
+    //     console.log(resp[0].data.data)
+    //     setPlayersSubscribed([...playersSubscribed, resp[0].data.data])
+    //   }
+    // );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const useMyContext = useContext(MyContext);
 
   if(useMyContext.role !== ROLES.user){
     return <UserNotAuthenticated/>;
@@ -60,7 +72,8 @@ const UserPage: React.FC = () => {
   }
 
   const handleSubscribePlayer = () => {
-
+    setPlayersSubscribed([...playersSubscribed, selectedPlayer])
+    addSubscriptionsToUser(useMyContext.jwt, playersSubscribed.map(p => p._id))
   }
 
   return (

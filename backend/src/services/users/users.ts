@@ -9,7 +9,9 @@ import {
   userResolver,
   userExternalResolver,
   userDataResolver,
-  userQueryResolver
+  userQueryResolver,
+  userPatchValidator,
+  userPatchResolver
 } from './users.schema'
 
 import type { Application } from '../../declarations'
@@ -44,6 +46,7 @@ export const user = (app: Application) => {
       find: [],
       get: [],
       create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
+      patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
       remove: []
     },
     after: {

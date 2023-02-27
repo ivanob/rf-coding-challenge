@@ -44,3 +44,36 @@ export async function fetchFootballPlayers(jwt: string): Promise<AxiosResponse<a
     throw error;
   }
 }
+
+export async function fetchFootballPlayer(jwt: string, id: string): Promise<AxiosResponse<any>> {
+  try {
+    const response: AxiosResponse = await axios.get(`http://localhost:3030/players/?_id=${id}`, 
+    {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`}
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function addSubscriptionsToUser(jwt: string, subs: string[]): Promise<AxiosResponse<any>> {
+  try {
+    const response: AxiosResponse = await axios.patch(`http://localhost:3030/users/`, {
+      subscribedPlayers: subs
+    }, 
+    {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwt}`
+        }
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

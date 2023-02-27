@@ -30,6 +30,8 @@ function App() {
     useMyContext.jwt = userAuthenticated.data.accessToken;
     useMyContext.login = userAuthenticated.data.user.login;
     useMyContext.role = userAuthenticated.data.user.role;
+    useMyContext.id = userAuthenticated.data.user._id;
+    useMyContext.subscribedPlayers = userAuthenticated.data.user.subscribedPlayers
     switch(userAuthenticated.data.user.role){
       case ROLES.admin:
         navigate("/admin");

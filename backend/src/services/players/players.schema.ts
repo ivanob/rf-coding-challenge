@@ -10,6 +10,7 @@ import { dataValidator, queryValidator } from '../../validators'
 export const playersSchema = Type.Object(
   {
     _id: Type.String({ objectid: true }),
+    name: Type.String(),
     number: Type.Number(),
     nationality: Type.String(),
     age: Type.Number(),
@@ -40,7 +41,7 @@ export const playersPatchValidator = getValidator(playersPatchSchema, dataValida
 export const playersPatchResolver = resolve<Players, HookContext>({})
 
 // Schema for allowed query properties
-export const playersQueryProperties = Type.Pick(playersSchema, ['_id', 'number'])
+export const playersQueryProperties = Type.Pick(playersSchema, ['_id', 'name'])
 export const playersQuerySchema = Type.Intersect(
   [
     querySyntax(playersQueryProperties),

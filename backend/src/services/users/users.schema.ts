@@ -13,7 +13,8 @@ export const userSchema = Type.Object(
     _id: Type.String({ objectid: true }),
     login: Type.String(),
     role: Type.String(),
-    password: Type.String()
+    password: Type.String(),
+    subscribedPlayers: Type.Array(Type.String({ objectid: true }))
   },
   { $id: 'User', additionalProperties: false }
 )
@@ -27,7 +28,7 @@ export const userExternalResolver = resolve<User, HookContext>({
 })
 
 // Schema for creating new users
-export const userDataSchema = Type.Pick(userSchema, ['login', 'password', 'role'], {
+export const userDataSchema = Type.Pick(userSchema, ['login', 'password', 'role', 'subscribedPlayers'], {
   $id: 'UserData',
   additionalProperties: false
 })
@@ -36,6 +37,14 @@ export const userDataValidator = getValidator(userDataSchema, dataValidator)
 export const userDataResolver = resolve<User, HookContext>({
   password: passwordHash({ strategy: 'local' })
 })
+
+// Schema for updating existing entries
+export const usersPatchSchema = Type.Partial(userDataSchema, {
+  $id: 'UserPatch'
+})
+export type UserPatch = Static<typeof usersPatchSchema>
+export const userPatchValidator = getValidator(usersPatchSchema, dataValidator)
+export const userPatchResolver = resolve<User, HookContext>({})
 
 // Schema for allowed query properties
 export const userQueryProperties = Type.Pick(userSchema, ['_id', 'login'])

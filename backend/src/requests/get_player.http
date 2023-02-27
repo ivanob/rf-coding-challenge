@@ -1,0 +1,2 @@
+curl -X GET 'http://localhost:3030/players/?_id=63f6726f7822011707a69905' \
+  -H 'Content-Type: application/json' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE2NzcwMDQ4NjksImV4cCI6MTY3NzA5MTI2OSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjYzZWZkMmJjNGNlZWFkNTA3NjNkNzU3YyIsImp0aSI6IjA5YWVjMGUyLTcwM2MtNDNlNy04NDJhLWIyYTBhMmM4ZWI5OCJ9.0yOuPzLq2rftdlfJhdvYNWu0gaqk6iObMsu-jK-D19w'

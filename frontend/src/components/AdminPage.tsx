@@ -4,7 +4,7 @@ import { ROLES } from '../services/types';
 import {fetchFootballPlayers} from '../services/requests'
 import { Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import UserNotAuthenticated from './UserNotAuthenticated';
-import './AdminPage.css';
+import './styles/AdminPage.css';
 
 type Player = {
   _id: string,
