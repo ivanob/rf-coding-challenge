@@ -5,9 +5,11 @@ import ModalUserType from './ModalUserType';
 import { MyContext } from '../services/context';
 import { useNavigate } from 'react-router-dom';
 import { ROLES } from '../services/types';
+import { setupSocket } from '../socket';
 
 function App() {
   const useMyContext = useContext(MyContext);
+  useMyContext.wsConn = setupSocket();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

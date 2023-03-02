@@ -7,6 +7,7 @@ This will create a mongoDB container with a shared volume that will persist data
 
 - To run the backend run:
 `>> cd backend`
+`>> npm install`
 `>> npm run compile`
 `>> npm run start`
 This will create a server running in localhost:3030 with a REST API serving the following endpoints:
@@ -16,5 +17,6 @@ This will create a server running in localhost:3030 with a REST API serving the 
 
 - To run the frontend run:
 `>> cd frontend`
+`>> npm install`
 `>> npm run start`
 This will create a server running in localhost:3000 serving the react frontend app

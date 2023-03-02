@@ -60,7 +60,7 @@ export async function fetchFootballPlayer(jwt: string, id: string): Promise<Axio
   }
 }
 
-export async function addSubscriptionsToUser(jwt: string, subs: string[]): Promise<AxiosResponse<any>> {
+export async function setSubscriptionsToUser(jwt: string, subs: string[]): Promise<AxiosResponse<any>> {
   try {
     const response: AxiosResponse = await axios.patch(`http://localhost:3030/users/`, {
       subscribedPlayers: subs

@@ -6,6 +6,7 @@ interface MyContextData {
   login: string;
   role: string;
   subscribedPlayers: string[]
+  wsConn?: any
 }
 
 export const MyContext = createContext<MyContextData>({
@@ -13,5 +14,6 @@ export const MyContext = createContext<MyContextData>({
   jwt: '',
   login: '',
   role: '',
-  subscribedPlayers: []
+  subscribedPlayers: [],
+  wsConn: undefined
 });
