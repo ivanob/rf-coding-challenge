@@ -1,25 +1,25 @@
 .my-component-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f8ff;
-  }
-  
-  .my-component-box {
-    width: 600px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px #888888;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f8ff;
+}
 
-  .row {
-    padding: 10px;
-  }
+.my-component-box {
+  width: 600px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #888888;
+}
 
-  .header {
-    background-color: #f0f8ff;
-    padding: 10px;
-    margin: 0px;
-  }
+.row {
+  padding: 10px;
+}
+
+.header {
+  background-color: #f0f8ff;
+  padding: 10px;
+  margin: 0px;
+}

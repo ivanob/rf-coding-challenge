@@ -3,7 +3,7 @@ import { User } from './types';
 
 export async function sendRequestCreateUser(user: User): Promise<AxiosResponse<any>> {
   try {
-    const response: AxiosResponse = await axios.post('http://localhost:3030/users/', { "login": user.login, "password": user.password, "role": user.role}, 
+    const response: AxiosResponse = await axios.post('http://localhost:3030/users/', { "login": user.login, "password": user.password, "role": user.role, "subscribedPlayers": []}, 
     {
         headers: {'Content-Type': 'application/json',}
     });

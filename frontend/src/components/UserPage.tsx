@@ -16,6 +16,7 @@ import {
 } from "react-bootstrap";
 import UserNotAuthenticated from "./UserNotAuthenticated";
 import "./styles/UserPage.css";
+import { ToastContainer, toast } from "react-toastify";
 
 type Player = {
   _id: string;
@@ -76,7 +77,10 @@ const UserPage: React.FC = () => {
       useMyContext.jwt,
       playersSubscribed.map((p) => p._id)
     );
-    useMyContext.wsConn.emit('subscribe', useMyContext.id, selectedPlayer._id)
+    const displayMessage = (str: string) => {
+      console.log(str);
+    };
+    useMyContext.wsConn.emit("subscribe", selectedPlayer._id, displayMessage);
   };
 
   const handleRemoveSubscription = (idPlayerToRemove: string) => {
@@ -91,12 +95,35 @@ const UserPage: React.FC = () => {
     );
   };
 
+  useMyContext.wsConn.on(
+    "received-notification",
+    (playerId: string, message: string) => {
+      console.log(
+        `Received notification about playerId=${playerId}, message=${message}`
+      );
+      const playerName = playersSubscribed.find(p => p._id === playerId)?.name
+      if(playerName){
+        toast(`[${new Date().toDateString()}] News from ${playerName}: ${message}`);
+      }
+    }
+  );
+
   return (
     <>
       <p className="header">
         Hello <b>{useMyContext.login}</b>, you are logged in as{" "}
         <b>{useMyContext.role}</b>
       </p>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
+      />
       <div className="my-component-container">
         <Container className="my-component-box">
           <Row>

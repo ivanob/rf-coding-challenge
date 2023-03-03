@@ -1,10 +1,15 @@
-import io from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
+import io, { Socket } from "socket.io-client";
+
+var socket: Socket<DefaultEventsMap, DefaultEventsMap> | undefined = undefined;
 
 export const setupSocket = () => {
-  const socket = io("http://localhost:3031");
-  socket.on('connection', () => {
-    console.log('Connected via websocket')
-  })
-  // socket.emit('subscribe', "abc", "123");
+  if(!socket){
+    socket = io("http://localhost:3031");
+    socket.on('connection', () => {
+      console.log('Connected via websocket')
+    })
+  }
+  
   return socket;
 };

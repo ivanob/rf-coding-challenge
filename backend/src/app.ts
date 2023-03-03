@@ -42,9 +42,18 @@ app.configure(
       console.log('Feathers websocket listening on http://localhost:3031')
       io.on('connection', (socket) => {
         // Do something here
-        console.log(`Client with ID=${socket.id} connected via websocket`);
-        socket.on('subscribe', (userId: string, playerId: string) => {
-          console.log(`The client with ID=${userId} has subscribed to player=${playerId}`)
+        console.log(`Client with ID=${socket.id} connected via websocket`)
+        socket.on('subscribe', (playerId: string, callback: (str: string) => void) => {
+          console.log(`The client with ID=${socket.id} has subscribed to player=${playerId}`)
+          socket.join(playerId)
+          callback(`Subscribed to playerId=${playerId} sucessfully!`)
+        })
+        socket.on('unsubscribe', (userId: string, playerId: string) => {
+          console.log(`The client with ID=${userId} has unsubscribed to player=${playerId}`)
+        })
+        socket.on('send-notification', (playerId: string, message: string) => {
+          console.log(`Received notification about playerId=${playerId}, message=${message}`)
+          socket.to(playerId).emit('received-notification', playerId, message)
         })
       })
     }
