@@ -43,15 +43,17 @@ app.configure(
       io.on('connection', (socket) => {
         // Do something here
         console.log(`Client with ID=${socket.id} connected via websocket`)
-        socket.on('subscribe', (playerId: string, callback: (str: string) => void) => {
+        socket.on("subscribe", (playerId: string, callback: (str: string) => void) => {
           console.log(`The client with ID=${socket.id} has subscribed to player=${playerId}`)
           socket.join(playerId)
           callback(`Subscribed to playerId=${playerId} sucessfully!`)
         })
-        socket.on('unsubscribe', (userId: string, playerId: string) => {
-          console.log(`The client with ID=${userId} has unsubscribed to player=${playerId}`)
+        socket.on("unsubscribe", (playerId: string, callback: (str: string) => void) => {
+          console.log(`The client with ID=${socket.id} has unsubscribed to player=${playerId}`)
+          socket.leave(playerId)
+          callback(`Unsubscribed to playerId=${playerId} sucessfully!`)
         })
-        socket.on('send-notification', (playerId: string, message: string) => {
+        socket.on("send-notification", (playerId: string, message: string) => {
           console.log(`Received notification about playerId=${playerId}, message=${message}`)
           socket.to(playerId).emit('received-notification', playerId, message)
         })

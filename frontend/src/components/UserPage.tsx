@@ -36,6 +36,10 @@ const emptyPlayer: Player = {
   position: "",
 };
 
+const callbackDisplayWSMsg = (str: string) => {
+  console.log(str);
+};
+
 const UserPage: React.FC = () => {
   const useMyContext = useContext(MyContext);
   const [selectedPlayer, setSelectedPlayer] = useState(emptyPlayer);
@@ -77,14 +81,11 @@ const UserPage: React.FC = () => {
       useMyContext.jwt,
       playersSubscribed.map((p) => p._id)
     );
-    const displayMessage = (str: string) => {
-      console.log(str);
-    };
-    useMyContext.wsConn.emit("subscribe", selectedPlayer._id, displayMessage);
+    
+    useMyContext.wsConn.emit("subscribe", selectedPlayer._id, callbackDisplayWSMsg);
   };
 
   const handleRemoveSubscription = (idPlayerToRemove: string) => {
-    console.log(idPlayerToRemove);
     setPlayersSubscribed(
       playersSubscribed.filter((p) => p._id !== idPlayerToRemove)
     );
@@ -93,6 +94,7 @@ const UserPage: React.FC = () => {
       useMyContext.jwt,
       playersSubscribed.map((p) => p._id)
     );
+    useMyContext.wsConn.emit("unsubscribe", idPlayerToRemove, callbackDisplayWSMsg);
   };
 
   useMyContext.wsConn.on(
