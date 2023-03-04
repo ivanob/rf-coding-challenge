@@ -16,13 +16,6 @@ export class UserService<ServiceParams extends Params = UserParams> extends Mong
   UserData,
   ServiceParams
 > {
-  // patch(id: unknown, data: unknown, params?: unknown): Promise<any> {
-  //   console.log('LOG1', data)
-  //   console.log('LOG2', id)
-  //   console.log('LOG3', params)
-  //   this._patch()
-  //   return new Promise(() => {})
-  // }
 
   create(data: any, params?: ServiceParams | undefined): Promise<any>{
     return this._create({...data, subscribedPlayers: []});

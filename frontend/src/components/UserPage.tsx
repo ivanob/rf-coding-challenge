@@ -44,16 +44,19 @@ const UserPage: React.FC = () => {
   const useMyContext = useContext(MyContext);
   const [selectedPlayer, setSelectedPlayer] = useState(emptyPlayer);
   const [players, setPlayers] = useState([emptyPlayer]);
-  const [playersSubscribed, setPlayersSubscribed] = useState<Player[]>([]);
+  const [playersSubscribed, setPlayersSubscribed] = useState<{subs: Player[]}>({subs: []});
   useEffect(() => {
     fetchFootballPlayers(useMyContext.jwt)
       .then((response) => {
         const playersFetched = response.data.data;
         setPlayers(playersFetched);
-        useMyContext.subscribedPlayers.map(async (idPlayer: string) => {
-          const player = playersFetched.find((p: Player) => p._id === idPlayer);
-          setPlayersSubscribed((oldArray) => [...oldArray, player]);
+        setPlayersSubscribed({subs: []})
+        const playersToSubs: Player[] = useMyContext.subscribedPlayers.map((idPlayer: string) => {
+          const playerToSubscribe = playersFetched.find((p: Player) => p._id === idPlayer);
+          useMyContext.wsConn.emit("subscribe", playerToSubscribe._id, callbackDisplayWSMsg);
+          return playerToSubscribe
         });
+        setPlayersSubscribed({subs: playersToSubs})
       })
       .catch((error) => console.error(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +68,6 @@ const UserPage: React.FC = () => {
 
   const onChangeSelectPlayer = (event: React.ChangeEvent<any>) => {
     const p = players.find((p) => p._id === event.target.value);
-    console.log(p);
     if (p) {
       setSelectedPlayer(p);
     }
@@ -76,25 +78,28 @@ const UserPage: React.FC = () => {
   };
 
   const handleSubscribePlayer = () => {
-    setPlayersSubscribed([...playersSubscribed, selectedPlayer]);
-    setSubscriptionsToUser(
-      useMyContext.jwt,
-      playersSubscribed.map((p) => p._id)
-    );
-    
-    useMyContext.wsConn.emit("subscribe", selectedPlayer._id, callbackDisplayWSMsg);
+    if(!playersSubscribed.subs.find(p=>p._id === selectedPlayer._id)){
+      useMyContext.wsConn.emit("subscribe", selectedPlayer, callbackDisplayWSMsg);
+      const copyPlayersSubscribed = [...playersSubscribed.subs, selectedPlayer]
+      setPlayersSubscribed({subs: copyPlayersSubscribed})
+      setSubscriptionsToUser(
+        useMyContext.jwt,
+        copyPlayersSubscribed.map((p) => p._id)
+      );
+    }
   };
 
   const handleRemoveSubscription = (idPlayerToRemove: string) => {
-    setPlayersSubscribed(
-      playersSubscribed.filter((p) => p._id !== idPlayerToRemove)
-    );
-    console.log(playersSubscribed);
-    setSubscriptionsToUser(
-      useMyContext.jwt,
-      playersSubscribed.map((p) => p._id)
-    );
-    useMyContext.wsConn.emit("unsubscribe", idPlayerToRemove, callbackDisplayWSMsg);
+    const playerToRemove = playersSubscribed.subs.find(p => p._id === idPlayerToRemove)
+    if(playerToRemove){
+      const copyPlayersSubscribed = [...playersSubscribed.subs.filter(p => p._id !== playerToRemove._id)]
+      setPlayersSubscribed({subs: copyPlayersSubscribed})
+      useMyContext.wsConn.emit("unsubscribe", playerToRemove._id, callbackDisplayWSMsg);
+      setSubscriptionsToUser(
+        useMyContext.jwt,
+        copyPlayersSubscribed.map((p) => p._id)
+      );
+    }
   };
 
   useMyContext.wsConn.on(
@@ -103,9 +108,13 @@ const UserPage: React.FC = () => {
       console.log(
         `Received notification about playerId=${playerId}, message=${message}`
       );
-      const playerName = playersSubscribed.find(p => p._id === playerId)?.name
-      if(playerName){
-        toast(`[${new Date().toDateString()}] News from ${playerName}: ${message}`);
+      const playerName = playersSubscribed.subs.find(
+        (p) => p._id === playerId
+      )?.name;
+      if (playerName) {
+        toast(
+          `[${new Date().toDateString()}] News from ${playerName}: ${message}`
+        );
       }
     }
   );
@@ -145,7 +154,9 @@ const UserPage: React.FC = () => {
           <Row>
             <Col>
               <Form.Group>
-                <Form.Label>Selected player: {selectedPlayer.name}</Form.Label>
+                <Form.Label>
+                  Selected player: <b>{selectedPlayer.name}</b>
+                </Form.Label>
               </Form.Group>
             </Col>
             <Col>
@@ -174,8 +185,8 @@ const UserPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {playersSubscribed.map((p: Player, index: number) => (
-                  <tr>
+                {playersSubscribed.subs.map((p: Player, index: number) => (
+                  <tr key={index}>
                     <td>{index}</td>
                     <td>{p.name}</td>
                     <td>{p.nationality}</td>
@@ -187,7 +198,7 @@ const UserPage: React.FC = () => {
                         size="sm"
                         onClick={() => handleRemoveSubscription(p._id)}
                       >
-                        Remove
+                        Unsubscribe
                       </Button>
                     </td>
                   </tr>
