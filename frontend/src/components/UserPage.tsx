@@ -57,6 +57,24 @@ const UserPage: React.FC = () => {
           return playerToSubscribe
         });
         setPlayersSubscribed({subs: playersToSubs})
+        
+        // Setup the websocket
+        useMyContext.wsConn.on(
+          "received-notification",
+          (playerId: string, message: string) => {
+            console.log(
+              `Received notification about playerId=${playerId}, message=${message}`
+            );
+            const playerName = playersFetched.find(
+              (p: { _id: string; }) => p._id === playerId
+            )?.name;
+            if (playerName) {
+              toast(
+                `[${new Date().toDateString()}] News from ${playerName}: ${message}`
+              );
+            }
+          }
+        );
       })
       .catch((error) => console.error(error));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +97,7 @@ const UserPage: React.FC = () => {
 
   const handleSubscribePlayer = () => {
     if(!playersSubscribed.subs.find(p=>p._id === selectedPlayer._id)){
-      useMyContext.wsConn.emit("subscribe", selectedPlayer, callbackDisplayWSMsg);
+      useMyContext.wsConn.emit("subscribe", selectedPlayer._id, callbackDisplayWSMsg);
       const copyPlayersSubscribed = [...playersSubscribed.subs, selectedPlayer]
       setPlayersSubscribed({subs: copyPlayersSubscribed})
       setSubscriptionsToUser(
@@ -101,23 +119,6 @@ const UserPage: React.FC = () => {
       );
     }
   };
-
-  useMyContext.wsConn.on(
-    "received-notification",
-    (playerId: string, message: string) => {
-      console.log(
-        `Received notification about playerId=${playerId}, message=${message}`
-      );
-      const playerName = playersSubscribed.subs.find(
-        (p) => p._id === playerId
-      )?.name;
-      if (playerName) {
-        toast(
-          `[${new Date().toDateString()}] News from ${playerName}: ${message}`
-        );
-      }
-    }
-  );
 
   return (
     <>

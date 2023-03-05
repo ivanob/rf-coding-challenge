@@ -28,15 +28,18 @@ export class AdminService<ServiceParams extends Params = AdminParams>
         'Authorisation error: User authenticated must be admin to perform this operation'
       )
     }
+    const mongoURL = app.get('mongodb') || ''
+    const db = await (await MongoClient.connect(mongoURL)).db('test');
     if(data?.fetchData){
+      console.log('Admin has asked to fetch the database of players from an external resource');
       const players = await axios.get(playersJSON_URL);
       const flattened = (players.data.data.teams.flatMap((t: any) => t.players));
-      const mongoURL = app.get('mongodb') || ''
-      const db = await (await MongoClient.connect(mongoURL)).db('test');
       db.collection('players').insertMany(flattened);
     }
     if(data?.removeOldNotifs){
-
+      // 1 week = 604800 seconds = 604800000 miliseconds
+      console.log('Admin has asked to remove notifications older than 1 week');
+      db.collection('notifications').deleteMany({timestamp: {$lt: Date.now() - 604800000}})
     }
     
     return {

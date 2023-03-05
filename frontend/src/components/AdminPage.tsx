@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { MyContext } from "../services/context";
 import { ROLES } from "../services/types";
-import { fetchFootballPlayers } from "../services/requests";
+import { fetchFootballPlayers, sendNewNotification, sendOrderCleanOldNotifications } from "../services/requests";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import UserNotAuthenticated from "./UserNotAuthenticated";
 import "./styles/AdminPage.css";
@@ -60,7 +60,7 @@ const Admin: React.FC = () => {
   };
 
   const handleDeleteOldNotification = () => {
-    console.log(`Clicked button`);
+    sendOrderCleanOldNotifications(useMyContext.jwt);
   };
   const handleFetchDB = async () => {
     const playersFetched = await (
@@ -77,6 +77,7 @@ const Admin: React.FC = () => {
       selectedPlayer._id,
       internalState.msg
     );
+    sendNewNotification(useMyContext.jwt, selectedPlayer._id, internalState.msg);
   };
 
   return (
@@ -117,7 +118,7 @@ const Admin: React.FC = () => {
           <Row>
             <Col>
               <Form.Group>
-                <Form.Label>Selected player: {selectedPlayer.name}</Form.Label>
+                <Form.Label>Selected player: <b>{selectedPlayer.name}</b></Form.Label>
               </Form.Group>
             </Col>
           </Row>
