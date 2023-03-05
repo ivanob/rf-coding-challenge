@@ -61,6 +61,6 @@ This panel shows the <b>User dashboard</b> where the users can basically subscri
 
 ![User panel](screens/screen3.png)
 
-#### Communication
+#### Sending/receiving notifications
 This screen shows the communication process between admin and users, so whenever a new notification is raised by the admin it is sent <b>only</b> to the users subscribed to that scpecific player. Each notification lasts 10 seconds in the screen and is displayed in a toast.
 ![](screens/screen4.png)
